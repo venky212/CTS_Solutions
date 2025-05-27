@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Event Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#register">Register</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#" onclick="findNearbyEvents()">Find Nearby</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div id="welcomeBanner">
+            <h1>Welcome to Community Events</h1>
+            <p>Discover amazing local events and connect with your community!</p>
+            <span class="highlight" style="color: red; font-weight: bold;">Special Offer: 20% off first registration!</span>
+        </div>
+
+        <!-- Home Section -->
+        <section id="home">
+            <h2>About Our Portal</h2>
+            <div class="news-content">
+                Welcome to your local community event portal! We're excited to bring neighbors together through engaging activities, workshops, and celebrations. Our platform makes it easy to discover upcoming events, register for activities, and stay connected with what's happening in your area. From family-friendly festivals to professional development workshops, we have something for everyone. Join us in building a stronger, more connected community where every resident can find their place and make lasting memories with fellow neighbors.
+            </div>
+            
+            <div class="video-container">
+                <video id="promoVideo" width="600" controls oncanplay="showVideoReady()">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div id="videoStatus" style="display: none; margin-top: 1rem; color: #667eea; font-weight: 600;">
+                    🎥 Video ready to play!
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events">
+            <h2>Upcoming Events</h2>
+            
+            <!-- Filter Controls -->
+            <div class="filter-container">
+                <select id="categoryFilter" onchange="filterEvents()">
+                    <option value="">All Categories</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="festival">Festival</option>
+                    <option value="sports">Sports</option>
+                    <option value="music">Music</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search events..." onkeyup="searchEvents()" />
+                <select id="eventFeeSelect" onchange="showEventFee()">
+                    <option value="">Select to see fee</option>
+                    <option value="25">Workshop - $25</option>
+                    <option value="15">Festival - $15</option>
+                    <option value="10">Sports - $10</option>
+                    <option value="30">Music - $30</option>
+                </select>
+            </div>
+
+            <div id="eventFeeDisplay" style="margin: 1rem 0; font-weight: 600; color: #667eea;"></div>
+            
+            <div class="loading" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p>Loading events...</p>
+            </div>
+
+            <div class="event-grid" id="eventGrid">
+                <!-- Events will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Registration Form -->
+        <section id="register">
+            <h2>Event Registration</h2>
+            <div class="form-container">
+                <form id="registrationForm" onsubmit="return handleRegistration(event)">
+                    <div class="form-group">
+                        <label for="userName">Full Name</label>
+                        <input type="text" id="userName" name="userName" required autofocus placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userEmail">Email Address</label>
+                        <input type="email" id="userEmail" name="userEmail" required placeholder="your.email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" onblur="validatePhone()" placeholder="(555) 123-4567">
+                        <div id="phoneError" class="error" style="margin-top: 0.5rem;"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventDate">Preferred Date</label>
+                        <input type="date" id="eventDate" name="eventDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventType">Event Type</label>
+                        <select id="eventType" name="eventType" required>
+                            <option value="">Select an event type</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="festival">Festival</option>
+                            <option value="sports">Sports</option>
+                            <option value="music">Music</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Additional Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Any special requests or questions?" onkeyup="countCharacters()"></textarea>
+                        <div id="charCount" style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">0 characters</div>
+                    </div>
+                    
+                    <button type="submit" class="cta-button" onclick="showConfirmation()">Register Now</button>
+                    <button type="button" class="cta-button" onclick="clearPreferences()" style="margin-left: 1rem; background: #dc3545;">Clear Preferences</button>
+                </form>
+                
+                <div id="registrationStatus" class="status-message"></div>
+                <output id="confirmationOutput"></output>
+            </div>
+        </section>
+
+        <!-- Image Gallery -->
+        <section id="gallery">
+            <h2>Event Gallery</h2>
+            <p>Check out photos from our past community events!</p>
+            
+            <table class="gallery-table">
+                <tr>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=300&h=200&fit=crop" 
+                             alt="Summer Festival" title="Summer Festival 2024" class="gallery-img" ondblclick="enlargeImage(this)">
+                        <p>Summer Festival</p>
+                    </td>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop" 
+                             alt="Community Workshop" title="Cooking Workshop" class="gallery-img" ondblclick="enlargeImage(this)">
+                        <p>Cooking Workshop</p>
+                    </td>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=300&h=200&fit=crop" 
+                             alt="Sports Tournament" title="Annual Sports Day" class="gallery-img" ondblclick="enlargeImage(this)">
+                        <p>Sports Tournament</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&fit=crop" 
+                             alt="Music Concert" title="Local Band Concert" class="gallery-img" ondblclick="enlargeImage(this)">
+                        <p>Music Concert</p>
+                    </td>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=300&h=200&fit=crop" 
+                             alt="Art Exhibition" title="Community Art Show" class="gallery-img" ondblclick="enlargeImage(this)">
+                        <p>Art Exhibition</p>
+                    </td>
+                    <td>
+                        <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=300&h=200&fit=crop" 
+                             alt="Food Fair" title="International Food Fair" class="gallery-img" ondblclick="enlargeImage(this)">
+                        <p>Food Fair</p>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Have questions? Reach out to our community team!</p>
+            <p><strong>Email:</strong> events@community.local</p>
+            <p><strong>Phone:</strong> (555) 123-EVENTS</p>
+            <p><strong>Address:</strong> 123 Community Center Drive, Your City</p>
+            <a href="help.html" target="_blank" class="cta-button" style="margin-top: 1rem;">View Help Documentation</a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Community Event Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
